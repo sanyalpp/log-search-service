@@ -20,7 +20,7 @@ import static com.cribl.util.Constants.SERVER_LOG_INDEXED_FILE_LOCATION;
 import static com.cribl.util.Constants.SERVER_TEMP_LOG_INDEX_PROCESSING_FILE_LOCATION;
 import static com.cribl.util.FileUtil.copyFileToLocation;
 import static com.cribl.util.FileUtil.readFile;
-import static com.cribl.util.FileUtil.saveFile;
+import static com.cribl.util.FileUtil.writeContentToFile;
 
 @Service
 @Slf4j
@@ -51,6 +51,8 @@ public class LogIndexerService {
         for (String logLine : logLines) {
             log.info("Parsing log line: {}", logLine);
             LogEntry logEntry = LogEntry.parseLogLine(logLine);
+            String indexedFilePath = getIndexedFileName(logEntry);
+            writeContentToFile(indexedFilePath, logEntry.getMessage());
             for (String logKeyWord : logEntry.getTokens()) {
                 LogKeyWordIndex logKeyWordIndex = new LogKeyWordIndex();
                 logKeyWordIndex.setLogFileId(fileId);
@@ -59,9 +61,7 @@ public class LogIndexerService {
                 logKeyWordIndex.setLogRequestId(logEntry.getRequestUuid());
                 logKeyWordIndex.setLogKeyWord(logKeyWord);
                 logKeyWordIndex.setLogLevel(logEntry.getLogLevel());
-                String indexedFilePath = getIndexedFileName(logEntry);
                 logKeyWordIndex.setIndexedFileName(indexedFilePath);
-                saveFile(indexedFilePath, logEntry.getMessage());
                 logKeyWordIndexRepository.save(logKeyWordIndex);
             }
         }

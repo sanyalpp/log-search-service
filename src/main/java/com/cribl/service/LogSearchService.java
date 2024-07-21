@@ -9,11 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import static com.cribl.util.Constants.LOG_LINE_FORMAT;
 import static com.cribl.util.FileUtil.readFileAsString;
 
 @Service
@@ -27,11 +31,11 @@ public class LogSearchService {
     private LogKeyWordIndexRepository logKeyWordIndexRepository;
 
     @SneakyThrows
-    public Set<String> getAllLogs(String logFileName, String keyword, int pageSize, int offset) {
+    public List<String> getAllLogs(String logFileName, String keyword, int pageSize, int offset) {
 
         Log log = logRepository.findByLogFileName(logFileName);
         if (log == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
 
         List<LogKeyWordIndex> logKeyWordIndices = null;
@@ -46,17 +50,24 @@ public class LogSearchService {
     }
 
     @SneakyThrows
-    private Set<String> getLogLines(List<LogKeyWordIndex> logKeyWordIndices) {
-        Set<String> logs = new HashSet<>();
+    private List<String> getLogLines(List<LogKeyWordIndex> logKeyWordIndices) {
+        Map<String, LogKeyWordIndex> logFileIndicesMap = new HashMap<>();
+        List<String> logs = new ArrayList<>();
         for (LogKeyWordIndex logKeyWordIndex : logKeyWordIndices) {
-            String logMessage = readFileAsString(logKeyWordIndex.getIndexedFileName());
-            String logLine = logKeyWordIndex.getLogTimeStamp()
-                    + " [" + logKeyWordIndex.getLogLevel()
-                    +"] ["
-                    + logKeyWordIndex.getLogRequestId() + "] : " + logMessage;
-            logs.add(logLine);
+            /*
+             Multiple key words could point to the same indexed file, we dont need to read the same file more than once
+             */
+            logFileIndicesMap.put(logKeyWordIndex.getIndexedFileName(), logKeyWordIndex);
         }
 
+        for (Map.Entry<String, LogKeyWordIndex> indexedFileEntry : logFileIndicesMap.entrySet()) {
+            String logMessage = readFileAsString(indexedFileEntry.getKey());
+            String logLine = MessageFormat.format(LOG_LINE_FORMAT,
+                    indexedFileEntry.getValue().getLogTimeStamp(),
+                    indexedFileEntry.getValue().getLogLevel(),
+                    indexedFileEntry.getValue().getLogRequestId(), logMessage);
+            logs.add(logLine);
+        }
         return logs;
     }
 }

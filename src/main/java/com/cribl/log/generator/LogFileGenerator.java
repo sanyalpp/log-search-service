@@ -1,6 +1,8 @@
 package com.cribl.log.generator;
 
 import com.cribl.model.LogEntry;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,9 +20,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static com.cribl.util.Constants.LOG_SAMPLE_FILE_NAME;
+import static com.cribl.util.Constants.SERVER_LOG_BASE_LOCATION;
+import static com.cribl.util.Constants.SERVER_TEMP_LOG_INDEX_PROCESSING_FILE_LOCATION;
+import static com.cribl.util.FileUtil.copyFileToLocation;
+import static com.cribl.util.FileUtil.readFile;
+
 /*
 This program generates a sample log file.
  */
+@Slf4j
 public class LogFileGenerator {
     private static final Random random = new Random();
 
@@ -28,7 +37,7 @@ public class LogFileGenerator {
         List<LogEntry> logEntries = new ArrayList<>();
         String[] logLevels = {"[INFO]", "[DEBUG]", "[ERROR]"};
 
-        List<String> logs = readLogsFromFile(fileReadPath);
+        List<String> logs = readFile(fileReadPath);
 
         for (String message : logs) {
             LocalDateTime timestamp = LocalDateTime.now();
@@ -59,20 +68,20 @@ public class LogFileGenerator {
     public static void writeLogsToFile(List<LogEntry> logs, String fileWritePath) {
 
         // Construct the full path to /var/log within the current directory
-        File logDir = Paths.get(fileWritePath, "var", "logs").toFile();
+        File logDir = Paths.get(fileWritePath).toFile();
 
         // Ensure the directory exists
         if (!logDir.exists()) {
             if (logDir.mkdirs()) {
-                System.out.println("Created directories: " + logDir.getPath());
+                log.info("Created directories: " + logDir.getPath());
             } else {
-                System.err.println("Failed to create directories: " + logDir.getPath());
+                log.error("Failed to create directories: " + logDir.getPath());
                 return;
             }
         }
 
         // Create the log file within the directory
-        File logFile = new File(logDir, "serviceLogs.log");
+        File logFile = new File(logDir, LOG_SAMPLE_FILE_NAME);
 
         // Write the list of strings to the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile))) {
@@ -85,10 +94,11 @@ public class LogFileGenerator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Logs written to file: " + logFile.getPath());
+        log.info("Logs written to file: " + logFile.getPath());
     }
 
-    private static List<String> readLogsFromFile(String filePath) {
+    /*
+    private static List<String> readLogLinesFromFile(String filePath) {
         List<String> logs = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -103,6 +113,8 @@ public class LogFileGenerator {
 
         return logs;
     }
+
+     */
 
     // Method to generate a random exception
     private static Exception generateRandomException() {
@@ -127,10 +139,17 @@ public class LogFileGenerator {
         for (StackTraceElement stackTraceElement : stackTrace) {
             str.append(stackTraceElement.toString()).append(" ");
         }
-        System.out.println(str);
+        log.debug(str.toString());
         return str.toString();
     }
 
+    public static void createSampleLogFile(MultipartFile file) {
+        String filePath = copyFileToLocation(file, SERVER_TEMP_LOG_INDEX_PROCESSING_FILE_LOCATION);
+        List<LogEntry> logEntries = generateLogEntries(filePath);
+        String fileWritePath = System.getProperty("user.dir") + SERVER_LOG_BASE_LOCATION +
+                FileSystems.getDefault().getSeparator();
+        writeLogsToFile(logEntries, fileWritePath);
+    }
     public static void main(String[] args) {
         // Please modify based on your destination directory
         String fileReadPath = System.getProperty("user.dir")

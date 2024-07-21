@@ -27,7 +27,7 @@ public class LogSearchController {
                                          @RequestParam(value = "pageSize",defaultValue = "50") int pageSize,
                                          @RequestParam(value = "offset",defaultValue = "1") int offset) {
         validate(keyword, pageSize, offset);
-        Set<String> logs = logSearchService.getAllLogs(logFileName, keyword, pageSize, offset);
+        List<String> logs = logSearchService.getAllLogs(logFileName, keyword, pageSize, offset);
         return LogSearchResponse.builder()
                 .logFileName(logFileName)
                 .pageSize(pageSize)

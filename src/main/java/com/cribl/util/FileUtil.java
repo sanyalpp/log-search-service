@@ -78,7 +78,7 @@ public class FileUtil {
         return lines;
     }
 
-    public static void saveFile(final String filePath, String fileContent) {
+    public static void writeContentToFile(final String filePath, String fileContent) {
         try {
             Path path = Paths.get("." + FileSystems.getDefault().getSeparator() + filePath);
             // Create parent directories if they do not exist

@@ -5,14 +5,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
 @EqualsAndHashCode
 public class LogSearchResponse implements Serializable {
     private String logFileName;
-    private Set<String> logLines;
+    private List<String> logLines;
     /*
     Note:
         HATEOAS can be implemented so that the links contain the prev,next, current page etc, instead
