@@ -30,8 +30,6 @@ public class LogKeyWordIndex {
     @Column(name =  "log_keyword")
     private String logKeyWord;
 
-    //@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    //@JoinColumn(name = "log_file", referencedColumnName = "log_file_id")
     @Column(name = "log_file_id")
     private String logFileId;
 

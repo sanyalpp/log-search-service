@@ -97,25 +97,6 @@ public class LogFileGenerator {
         log.info("Logs written to file: " + logFile.getPath());
     }
 
-    /*
-    private static List<String> readLogLinesFromFile(String filePath) {
-        List<String> logs = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                logs.add(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return logs;
-    }
-
-     */
-
     // Method to generate a random exception
     private static Exception generateRandomException() {
         Random random = new Random();
@@ -150,6 +131,7 @@ public class LogFileGenerator {
                 FileSystems.getDefault().getSeparator();
         writeLogsToFile(logEntries, fileWritePath);
     }
+
     public static void main(String[] args) {
         // Please modify based on your destination directory
         String fileReadPath = System.getProperty("user.dir")
