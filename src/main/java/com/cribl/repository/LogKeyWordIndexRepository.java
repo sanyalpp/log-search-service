@@ -11,8 +11,9 @@ import java.util.List;
 @Repository
 public interface LogKeyWordIndexRepository extends JpaRepository<LogKeyWordIndex, String> {
 
+    /* The keyword search is case sensitive */
     @Query(value = "SELECT * FROM INFORMATION_SCHEMA.log_keywords_index lki " +
-            "where lki.log_file_id = ?1 AND lki.log_keyword like ?2 " +
+            "where lki.log_file_id = ?1 AND lki.log_keyword like %?2% " +
             "limit ?3 offset ?4", nativeQuery = true)
     List<LogKeyWordIndex> findByLogFileIdAndLogKeyWordLike(@Param("logFileId") String logFileId,
                                                            @Param("logKeyWord") String logKeyWord,

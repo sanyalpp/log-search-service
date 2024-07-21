@@ -27,10 +27,11 @@ public class LogSearchController {
                                          @RequestParam(value = "pageSize",defaultValue = "50") int pageSize,
                                          @RequestParam(value = "offset",defaultValue = "1") int offset) {
         validate(keyword, pageSize, offset);
-        List<String> logs = logSearchService.getAllLogs(logFileName, keyword, pageSize, offset);
+        int updatedPageSize = pageSize > 50 ? 50 : pageSize; // Enforcing a page size of 50 only
+        List<String> logs = logSearchService.getAllLogs(logFileName, keyword, updatedPageSize, offset);
         return LogSearchResponse.builder()
                 .logFileName(logFileName)
-                .pageSize(pageSize)
+                .pageSize(updatedPageSize)
                 .nextOffset(offset + 1)
                 .logLines(logs)
                 .build();
