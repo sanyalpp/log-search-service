@@ -2,31 +2,47 @@ package com.cribl.rest.controller;
 
 import java.util.List;
 
+import com.cribl.rest.response.LogSearchResponse;
+import com.cribl.service.LogSearchService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.cribl.entities.Log;
 
-//creating RestController
 @RestController
+@RequestMapping(value = "/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
+@Slf4j
 public class LogSearchController {
-    //autowired the LogSearchService class
-    //@Autowired
-    //private LogSearchService logSearchService;
+    @Autowired
+    private LogSearchService logSearchService;
 
-    //creating a get mapping that retrieves all the logs detail from the database
+    //Creating a get mapping that retrieves all the logs detail from the database
     @GetMapping("/logs")
-    private List<Log> getAllLogs() {
-
-        return null;//logSearchService.getAllLogs();
+    private LogSearchResponse getAllLogs(@RequestParam(value = "logFileName", required = true) String logFileName,
+                                         @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                                         @RequestParam(value = "pageSize",defaultValue = "50") int pageSize,
+                                         @RequestParam(value = "offset",defaultValue = "1") int offset) {
+        validate(keyword, pageSize, offset);
+        List<String> logs = logSearchService.getAllLogs(logFileName, keyword, pageSize, offset);
+        return LogSearchResponse.builder()
+                .logFileName(logFileName)
+                .pageSize(pageSize)
+                .nextOffset(offset + 1)
+                .logLines(logs)
+                .build();
     }
 
-    //creating a get mapping that retrieves the detail of a specific log
-    @GetMapping("/logs/{id}")
-    private Log getStudent(@PathVariable("id") int id) {
+    // Validations
+    private void validate(String keyword, int pageSize, int offset) {
+        if (pageSize < 1 || offset < 0 ) {
+            throw new IllegalArgumentException("pageSize or offset values are incorrect");
+        }
 
-        return null;//logSearchService.getStudentById(id);
+        if (keyword != null && keyword.isEmpty()) {
+           throw new IllegalArgumentException("provided keyword is empty");
+        }
     }
-
 }

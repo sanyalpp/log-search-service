@@ -89,4 +89,16 @@ public class FileUtil {
             log.error("Error occurred while saving file {}", filePath, e);
         }
     }
+
+    /**
+     * Reads the content of a file and returns it as a string.
+     *
+     * @param filePath the path of the file to read
+     * @return the content of the file as a string
+     * @throws IOException if an I/O error occurs reading from the file or a malformed or unmappable byte sequence is read
+     */
+    public static String readFileAsString(String filePath) throws IOException {
+        Path path = Paths.get("." + FileSystems.getDefault().getSeparator() + filePath);
+        return new String(Files.readAllBytes(path));
+    }
 }

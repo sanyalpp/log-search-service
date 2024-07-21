@@ -51,5 +51,4 @@ public class LogKeyWordIndex {
     public void onCreate() {
         this.setId(UUID.randomUUID().toString());
     }
-
 }
