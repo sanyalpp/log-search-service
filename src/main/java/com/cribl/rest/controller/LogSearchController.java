@@ -1,6 +1,7 @@
 package com.cribl.rest.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import com.cribl.rest.response.LogSearchResponse;
 import com.cribl.service.LogSearchService;
@@ -21,12 +22,12 @@ public class LogSearchController {
 
     //Creating a get mapping that retrieves all the logs detail from the database
     @GetMapping("/logs")
-    private LogSearchResponse getAllLogs(@RequestParam(value = "logFileName", required = true) String logFileName,
-                                         @RequestParam(value = "keyword", defaultValue = "") String keyword,
+    private LogSearchResponse getAllLogs(@RequestParam(value = "logFileName") String logFileName,
+                                         @RequestParam(value = "keyword", required = false) String keyword,
                                          @RequestParam(value = "pageSize",defaultValue = "50") int pageSize,
                                          @RequestParam(value = "offset",defaultValue = "1") int offset) {
         validate(keyword, pageSize, offset);
-        List<String> logs = logSearchService.getAllLogs(logFileName, keyword, pageSize, offset);
+        Set<String> logs = logSearchService.getAllLogs(logFileName, keyword, pageSize, offset);
         return LogSearchResponse.builder()
                 .logFileName(logFileName)
                 .pageSize(pageSize)

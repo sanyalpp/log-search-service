@@ -1,8 +1,6 @@
 package com.cribl.repository;
 
 import com.cribl.entities.LogKeyWordIndex;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,12 +11,24 @@ import java.util.List;
 @Repository
 public interface LogKeyWordIndexRepository extends JpaRepository<LogKeyWordIndex, String> {
 
-    //@Query("SELECT l FROM LogKeyWordIndex l WHERE l.logKeyWord LIKE :logKeyWord")
-    @Query(value = "SELECT * FROM INFORMATION_SCHEMA.log_keywords_index lki where lki.log_keyword like %?1% limit ?2 offset ?3", nativeQuery = true)
-    List<LogKeyWordIndex> findByLogKeyWordLike(@Param("logKeyWord") String logKeyWord, int limit, int offset);
+    @Query(value = "SELECT * FROM INFORMATION_SCHEMA.log_keywords_index lki " +
+            "where lki.log_file_id = ?1 AND lki.log_keyword like ?2 " +
+            "limit ?3 offset ?4", nativeQuery = true)
+    List<LogKeyWordIndex> findByLogFileIdAndLogKeyWordLike(@Param("logFileId") String logFileId,
+                                                           @Param("logKeyWord") String logKeyWord,
+                                                           int limit,
+                                                           int offset);
+    @Query(value = "SELECT * FROM INFORMATION_SCHEMA.log_keywords_index lki " +
+            "where lki.log_file_id = ?1 " +
+            "limit ?2 offset ?3", nativeQuery = true)
+    List<LogKeyWordIndex> findAllByLogFileId(@Param("logFileId") String logFileId,
+                                          int limit,
+                                          int offset);
 
-    List<LogKeyWordIndex> findByLogFileIdAndLogKeyWord(@Param("logFileId") String logFileId,
-                                                       @Param("logKeyWord") String logKeyWord);
+    /*
+     Other granular queries can be provided by logLevel and requestId as well.
+     The following two methods are examples, they aren't implemented.
+     */
     List<LogKeyWordIndex> findByLogFileIdAndLogLevel(@Param("logFileId") String logFileId,
                                                      @Param("logLevel") String logLevel);
 
