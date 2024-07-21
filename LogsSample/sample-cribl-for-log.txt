@@ -1,0 +1,27 @@
+Cribl is the Data Engine for IT and Security. Our mission is to empower enterprises to unlock the value of all their data.
+We built our data processing engine specifically for IT and Security and made sure our Cribl product suite is vendor-agnostic.
+Our data engine is the heart of a potent data management solution that collects data from any source,
+processes billions of events per second,
+automatically routes data to optimize storage, and analyzes any data, any time, anywhere.
+With Cribl, IT and Security teams have choice, control, and flexibility to adapt to data needs that are always changing.
+Fortune 1000 companies around the world depend on Cribl’s innovative and proven product suite.
+Cribl Stream is the industry’s leading observability pipeline. Cribl Edge is an intelligent, vendor-neutral agent.
+And Cribl Search is the industry’s first search-in-place solution.
+Founded in 2018, Cribl is a remote-first workforce with headquarters in San Francisco, California.
+The Master of Information Technology Security (MITS) program is a graduate professional program that prepares
+individuals to work in the high-demand IT security industry. The program adopts a project method that provides
+students with the experience to apply core course materials to a substantial project in the workplace during the latter part of the program.
+The MITS program is one of the first of its kind in Canada and one of few specialized IT security graduate
+degree programs available in the world. Through theory and applied learning, the program enables students to
+develop an extensive understanding of business and information technology security, polish communication skills and examine business and IT ethics in a team environment.
+To achieve the objectives of the program and to enhance students' learning experience,
+it is important for the program to provide students with the necessary hands-on skills and knowledge.
+The Faculty of Business and Information Technology provides a Hacker Research Lab to enhance the curriculum of the MITS program.
+This lab facility hosts an array of network settings and consists of a variety of network equipment and wireless devices in a secure setting.
+It offers students a secluded environment within which to work on various IT security projects and experiments.
+The MITS curriculum contains the domains found in the Certified Information Systems Security Profession (CISSP) exam.
+The curriculum also provides students with the opportunity to apply core course concepts to a substantial project in the workplace.
+This plan of study introduces students to the fundamental knowledge of the ever-changing IT security field.
+MITS graduates will not only be able to understand and apply the best of current practice but will
+also be able to act as managers of transformation to improve that practice as the field evolves.
+MITS graduates are prepared to work in different levels as IT security professionals.

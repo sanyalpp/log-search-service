@@ -34,7 +34,7 @@ public class LogFileGenerator {
             LocalDateTime timestamp = LocalDateTime.now();
             String logLevel = logLevels[random.nextInt(100) % logLevels.length];
             UUID requestUuid = UUID.randomUUID(); // Generate a random UUID for each request
-            logEntries.add(new LogEntry(timestamp, logLevel, message, requestUuid.toString()));
+            logEntries.add(new LogEntry(timestamp, logLevel, requestUuid.toString(), message));
             LogEntry errorLogEntry = generateRandomExceptionLog();
             if (errorLogEntry != null) {
                 logEntries.add(errorLogEntry);
@@ -50,7 +50,7 @@ public class LogFileGenerator {
                 throw generateRandomException();
             } catch (Exception e) {
                 return new LogEntry(LocalDateTime.now(),
-                        "[ERROR]", getStackTraceAsString(e), UUID.randomUUID().toString());
+                        "[ERROR]", UUID.randomUUID().toString(), getStackTraceAsString(e));
             }
         }
         return null;
@@ -135,11 +135,11 @@ public class LogFileGenerator {
         // Please modify based on your destination directory
         String fileReadPath = System.getProperty("user.dir")
                 + FileSystems.getDefault().getSeparator()
-                + "LogsFolder/sample-cribl-for-log.txt";
+                + "LogsSample/sample-cribl-for-log.txt";
         System.out.println("Read from " + fileReadPath);
         String fileWritePath = System.getProperty("user.dir")
                 +  FileSystems.getDefault().getSeparator();
-        System.out.println("Write from: " + );
+        System.out.println("Write from: " + fileWritePath);
         writeLogsToFile(generateLogEntries(fileReadPath), fileWritePath);
     }
 }

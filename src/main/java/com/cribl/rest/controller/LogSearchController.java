@@ -1,4 +1,4 @@
-package com.cribl.controller;
+package com.cribl.rest.controller;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.cribl.controller;
+package com.cribl.rest.controller;
 
 import com.cribl.indexer.LogIndexerService;
 import org.springframework.beans.factory.annotation.Autowired;

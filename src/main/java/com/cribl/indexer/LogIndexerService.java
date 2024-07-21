@@ -68,7 +68,9 @@ public class LogIndexerService {
     }
 
     private static String getIndexedFileName(LogEntry logEntry) {
-        return SERVER_LOG_INDEXED_FILE_LOCATION + logEntry.generateHashForLogEntry() + LOG_INDEX_FILE_EXTENSION;
+        return SERVER_LOG_INDEXED_FILE_LOCATION
+                + logEntry.generateHashForLogEntry()
+                + LOG_INDEX_FILE_EXTENSION;
     }
 }
 
