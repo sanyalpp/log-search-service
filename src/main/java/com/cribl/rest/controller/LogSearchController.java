@@ -22,7 +22,7 @@ public class LogSearchController {
 
     //Creating a get mapping that retrieves all the logs detail from the database
     @GetMapping("/logs")
-    private LogSearchResponse getAllLogs(@RequestParam(value = "logFileName") String logFileName,
+    public LogSearchResponse getAllLogs(@RequestParam(value = "logFileName") String logFileName,
                                          @RequestParam(value = "keyword", required = false) String keyword,
                                          @RequestParam(value = "pageSize",defaultValue = "50") int pageSize,
                                          @RequestParam(value = "offset",defaultValue = "1") int offset) {

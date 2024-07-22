@@ -1,5 +1,6 @@
 package com.cribl.util;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -27,8 +28,11 @@ import java.util.List;
 @UtilityClass
 public class FileUtil {
 
-    public static String copyFileToLocation(final MultipartFile multipartFile,
-                                            final String location) {
+    /*
+    Copies the Multipart file to its location
+     */
+    public static String copyFileToLocation(@NonNull final MultipartFile multipartFile,
+                                            @NonNull final String location) {
         final String destination =
                 location + FileSystems.getDefault().getSeparator() + multipartFile.getOriginalFilename();
         createLocationIfNotExist(destination);
@@ -47,7 +51,7 @@ public class FileUtil {
         return new File(destination).getPath();
     }
 
-    public static void createLocationIfNotExist(final String location) {
+    public static void createLocationIfNotExist(@NonNull final String location) {
         if (!Files.exists(Paths.get(location))) {
             try {
                 FileUtils.createParentDirectories(new File(location));
@@ -58,7 +62,10 @@ public class FileUtil {
         }
     }
 
-    public static List<String> readFile(final String filePath) {
+    /*
+    Reads a file and returns a list of lines as String
+     */
+    public static List<String> readFile(@NonNull final String filePath) {
         final List<String> lines = new ArrayList<>();
         try (FileInputStream fileInputStream = new FileInputStream("."
                 + FileSystems.getDefault().getSeparator() + filePath);
@@ -78,7 +85,7 @@ public class FileUtil {
         return lines;
     }
 
-    public static void writeContentToFile(final String filePath, String fileContent) {
+    public static void writeContentToFile(@NonNull final String filePath, @NonNull final String fileContent) {
         try {
             Path path = Paths.get("." + FileSystems.getDefault().getSeparator() + filePath);
             // Create parent directories if they do not exist
@@ -97,7 +104,7 @@ public class FileUtil {
      * @return the content of the file as a string
      * @throws IOException if an I/O error occurs reading from the file or a malformed or unmappable byte sequence is read
      */
-    public static String readFileAsString(String filePath) throws IOException {
+    public static String readFileAsString(@NonNull final String filePath) throws IOException {
         Path path = Paths.get("." + FileSystems.getDefault().getSeparator() + filePath);
         return new String(Files.readAllBytes(path));
     }

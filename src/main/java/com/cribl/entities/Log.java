@@ -11,7 +11,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.util.UUID;
 
-//mark class as an Entity
 @Entity
 @ToString
 @Table(name = "log_file", schema = "INFORMATION_SCHEMA")
@@ -23,7 +22,7 @@ public class Log {
     @Column(name = "log_file_id")
     @Generated
     private String id;
-    //defining name as column name
+
     @Column(name = "log_file_name")
     private String logFileName;
 

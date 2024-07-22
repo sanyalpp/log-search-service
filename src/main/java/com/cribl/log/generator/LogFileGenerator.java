@@ -4,14 +4,10 @@ import com.cribl.model.LogEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -35,7 +31,7 @@ public class LogFileGenerator {
 
     private static List<LogEntry> generateLogEntries(String fileReadPath) {
         List<LogEntry> logEntries = new ArrayList<>();
-        String[] logLevels = {"[INFO]", "[DEBUG]", "[ERROR]"};
+        String[] logLevels = {"INFO", "DEBUG", "ERROR"};
 
         List<String> logs = readFile(fileReadPath);
 

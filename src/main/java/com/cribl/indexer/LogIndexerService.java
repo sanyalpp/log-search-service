@@ -22,6 +22,11 @@ import static com.cribl.util.FileUtil.copyFileToLocation;
 import static com.cribl.util.FileUtil.readFile;
 import static com.cribl.util.FileUtil.writeContentToFile;
 
+/*
+ This class creates indexes based on keywords found in the logs.
+ When logs are searched, keywords can be quickly looked up and the index file will give
+ the particular log line.
+ */
 @Service
 @Slf4j
 public class LogIndexerService {
@@ -69,7 +74,7 @@ public class LogIndexerService {
 
     private static String getIndexedFileName(LogEntry logEntry) {
         return SERVER_LOG_INDEXED_FILE_LOCATION
-                + logEntry.generateHashForLogEntry()
+                + logEntry.generateHashForLogEntryKeywordIndex()
                 + LOG_INDEX_FILE_EXTENSION;
     }
 }

@@ -28,8 +28,12 @@ public class LogSearchService {
     @Autowired
     private LogKeyWordIndexRepository logKeyWordIndexRepository;
 
+    /*
+    Method that fetches all logs based on the file name, keyword, pageSize and offset.
+     */
     @SneakyThrows
-    public List<String> getAllLogs(String logFileName, String keyword, int pageSize, int offset) {
+    public List<String> getAllLogs(final String logFileName, final String keyword,
+                                   final int pageSize, final int offset) {
 
         Log log = logRepository.findByLogFileName(logFileName);
         if (log == null) {
@@ -48,12 +52,12 @@ public class LogSearchService {
     }
 
     @SneakyThrows
-    private List<String> getLogLines(List<LogKeyWordIndex> logKeyWordIndices) {
+    private List<String> getLogLines(final List<LogKeyWordIndex> logKeyWordIndices) {
         Map<String, LogKeyWordIndex> logFileIndicesMap = new HashMap<>();
         List<String> logs = new ArrayList<>();
         for (LogKeyWordIndex logKeyWordIndex : logKeyWordIndices) {
             /*
-             Multiple key words could point to the same indexed file, we dont need to read the same file more than once
+             Multiple keywords could point to the same indexed file, we dont need to read the same file more than once
              */
             logFileIndicesMap.put(logKeyWordIndex.getIndexedFileName(), logKeyWordIndex);
         }
