@@ -6,7 +6,7 @@ the Tomcat server and the H2 database will be spin up and start running on port 
 
 # Business Use Case
 A customer has asked you for a way to provide on-demand monitoring of various
-unix-based servers without having to log into each individual machine and opening up
+Unix-based servers without having to log into each individual machine and opening up
 the log files found in ```/var/log```. The customer has asked for the ability to issue a REST
 request to a machine in order to retrieve logs from ```/var/log``` on the machine receiving the
 REST request.
@@ -47,6 +47,10 @@ API call is made:
 ```dtd
 curl -F 'file=@"<your-directory-path>/LogsSample/sample-cribl-for-log.txt"' localhost:3000/v1/logs/create 
 ```
+Upon successful completion, you will see a message:
+```dtd
+Successfully generated Logfile service.log from file {sample-cribl-for-log.txt} and stored at /var/logs
+```
 The ```service.log``` file has a strict logging format. This format is strctly followed throughout the course of this exercise :
 ```timestamp [log-level] [request-id] : log message ```
 for example :
@@ -58,9 +62,13 @@ and indices are created.
 ```dtd
 curl -F 'file=@"<your-directory-path>/Source/var/logs/service.log"' localhost:3000/v1/logs/index 
 ```
-3. Finally, you can now search on logs. Note that the tokenization algorithm is basic and it might miss some keywords 
-from properly indexing them. This is a limitation. In order to test the service you should try bunch of different 
-keywords. Also note, that like search on keywords in supported, however, the searches are case-sensitive 
+Upon successful completion, you should see the message:
+```dtd
+Logfile file {service.log} successfully indexed.
+```
+3. Finally, you can now search for logs. Note that the tokenization algorithm is basic, and it might miss some keywords 
+from properly indexing them. This is a limitation. In order to test the service you should try a bunch of different 
+keywords. Also note, that like search on keywords is supported, however, the searches are case-sensitive 
 for the keyword. Basic search on log-file-name and keyword combinations are supported at this time. log-file-name is 
 mandatory. Pagination has been implemented with a max mage size of 50 (enforced).
 ```dtd
@@ -68,26 +76,29 @@ curl -XGET http://localhost:3000/v1/logs/?logFileName=service.log&keyword=Crible
 ```
 You will get a response like the following:
 ```dtd
-{
-  "logFileName": "service.log",
-  "logLines": [
-    "7/21/24, 3:48 PM [INFO] [d7d2f70a-a83d-460a-a7a1-42c4a6d5d7e6] : We built our data processing engine specifically for IT and Security and made sure our Cribl product suite is vendor-agnostic.",
-    "7/21/24, 3:48 PM [ERROR] [a57f591e-54ad-4a1d-bccd-e0cc4214a888] : Fortune 1000 companies around the world depend on Cribl���������s innovative and proven product suite.",
-    "7/21/24, 3:48 PM [DEBUG] [171dd4c1-536f-42ed-b871-01682a4761fa] : And Cribl Search is the industry���������s first search-in-place solution.",
-    "7/21/24, 3:48 PM [DEBUG] [a7c6a638-78f6-4cd1-bcea-b5b816cb0b09] : Founded in 2018, Cribl is a remote-first workforce with headquarters in San Francisco, California.",
-    "7/21/24, 3:48 PM [INFO] [db6edfac-3da0-4747-a931-01140a29df70] : With Cribl, IT and Security teams have choice, control, and flexibility to adapt to data needs that are always changing.",
-    "7/21/24, 3:48 PM [ERROR] [349bd232-9e77-48cf-bf0e-9f1e23957a19] : Cribl Stream is the industry���������s leading observability pipeline. Cribl Edge is an intelligent, vendor-neutral agent."
-  ],
-  "pageSize": 50,
-  "nextOffset": 2
-}
+{"logFileName":"service.log","logLines":["7/22/24, 12:16 AM [INFO] [ee22c54f-2d2c-43ed-89fb-1f74eed72467] : Fortune 1000 companies around the world depend on Cribl���������s innovative and proven product suite.","7/22/24, 12:16 AM [INFO] [0abcd01a-2520-4589-8acf-882d67d770ff] : Founded in 2018, Cribl is a remote-first workforce with headquarters in San Francisco, California.","7/22/24, 12:16 AM [ERROR] [75031631-94e2-48b0-b801-570f8dab2295] : We built our data processing engine specifically for IT and Security and made sure our Cribl product suite is vendor-agnostic.","7/22/24, 12:16 AM [DEBUG] [42e6bf1c-bf8e-4847-9a8c-8519e22a71b9] : With Cribl, IT and Security teams have choice, control, and flexibility to adapt to data needs that are always changing.","7/22/24, 12:16 AM [INFO] [883b2669-e76a-4555-a005-56f5ebdad275] : Cribl Stream is the industry���������s leading observability pipeline. Cribl Edge is an intelligent, vendor-neutral agent.","7/22/24, 12:16 AM [ERROR] [b6a6714f-fcd7-43af-a8d2-9b110de9ed92] : And Cribl Search is the industry���������s first search-in-place solution."],"pageSize":50,"nextOffset":2}
 ```
-The format you receive is not pretty, you may make it pretty by installing jquery using brew. If you install jquery, 
-you can run the following:
+The format of response you receive is not pretty-printed, you may make it pretty by installing jquery using brew. 
+If you install jquery, you can run the following:
 ```dtd
 curl -XGET http://localhost:3000/v1/logs/?logFileName=service.log&keyword=Crib | jq .
 ```
-The response will be pretty like above.
+The response will be pretty-printed like below:
+```dtd
+{
+  "logFileName": "service.log",
+  "logLines": [
+    "7/22/24, 12:16 AM [INFO] [ee22c54f-2d2c-43ed-89fb-1f74eed72467] : Fortune 1000 companies around the world depend on Cribl���������s innovative and proven product suite.",
+    "7/22/24, 12:16 AM [INFO] [0abcd01a-2520-4589-8acf-882d67d770ff] : Founded in 2018, Cribl is a remote-first workforce with headquarters in San Francisco, California.",
+    "7/22/24, 12:16 AM [ERROR] [75031631-94e2-48b0-b801-570f8dab2295] : We built our data processing engine specifically for IT and Security and made sure our Cribl product suite is vendor-agnostic.",
+    "7/22/24, 12:16 AM [DEBUG] [42e6bf1c-bf8e-4847-9a8c-8519e22a71b9] : With Cribl, IT and Security teams have choice, control, and flexibility to adapt to data needs that are always changing.",
+    "7/22/24, 12:16 AM [INFO] [883b2669-e76a-4555-a005-56f5ebdad275] : Cribl Stream is the industry���������s leading observability pipeline. Cribl Edge is an intelligent, vendor-neutral agent.",
+    "7/22/24, 12:16 AM [ERROR] [b6a6714f-fcd7-43af-a8d2-9b110de9ed92] : And Cribl Search is the industry���������s first search-in-place solution."
+  ],
+  "pageSize": 50,
+  "nextOffset": 1
+}
+```
 
 # Assumptions & Considerations
 * For the given problem, the log file is generated by reading all the lines from the input file. The real world scenario

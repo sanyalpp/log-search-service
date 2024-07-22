@@ -55,7 +55,7 @@ public class LogFileGenerator {
                 throw generateRandomException();
             } catch (Exception e) {
                 return new LogEntry(LocalDateTime.now(),
-                        "[ERROR]", UUID.randomUUID().toString(), getStackTraceAsString(e));
+                        "ERROR", UUID.randomUUID().toString(), getStackTraceAsString(e));
             }
         }
         return null;
